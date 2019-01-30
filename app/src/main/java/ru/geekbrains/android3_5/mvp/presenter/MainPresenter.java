@@ -1,16 +1,16 @@
 package ru.geekbrains.android3_5.mvp.presenter;
 
 import android.annotation.SuppressLint;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
+
 import io.reactivex.Scheduler;
 import io.reactivex.subjects.PublishSubject;
-import ru.geekbrains.android3_5.mvp.model.repo.PaperUserRepo;
-import ru.geekbrains.android3_5.mvp.model.repo.RealmUserRepo;
-import ru.geekbrains.android3_5.mvp.model.repo.RoomUserRepo;
-import ru.geekbrains.android3_5.mvp.model.repo.UserRepo;
 import ru.geekbrains.android3_5.mvp.model.entity.Repository;
 import ru.geekbrains.android3_5.mvp.model.entity.User;
+import ru.geekbrains.android3_5.mvp.model.repo.MyRepository;
+import ru.geekbrains.android3_5.mvp.model.repo.RoomUserRepo;
 import ru.geekbrains.android3_5.mvp.presenter.list.IRepoListPresenter;
 import ru.geekbrains.android3_5.mvp.view.MainView;
 import ru.geekbrains.android3_5.mvp.view.item.RepoItemView;
@@ -42,13 +42,13 @@ public class MainPresenter extends MvpPresenter<MainView> {
     public RepoListPresenter repoListPresenter = new RepoListPresenter();
 
     private Scheduler mainThreadScheduler;
-    private RoomUserRepo userRepo;
+    private MyRepository userRepo;
 
     private User user;
 
     public MainPresenter(Scheduler mainThreadScheduler) {
         this.mainThreadScheduler = mainThreadScheduler;
-        userRepo = new RoomUserRepo();
+        userRepo = new MyRepository(new RoomUserRepo());
     }
 
     @Override

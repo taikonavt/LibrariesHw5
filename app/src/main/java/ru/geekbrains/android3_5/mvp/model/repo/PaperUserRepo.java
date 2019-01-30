@@ -10,38 +10,33 @@ import ru.geekbrains.android3_5.ui.NetworkStatus;
 
 import java.util.List;
 
-public class PaperUserRepo {
-    public Single<User> getUser(String username) {
-        if (NetworkStatus.isOnline()) {
-            return ApiHolder.getApi().getUser(username)
-                    .subscribeOn(Schedulers.io())
-                    .map(user -> {
-                        Paper.book("users").write(username, user);
-                        return user;
-                    });
-        } else {
-            if(!Paper.book("users").contains(username)){
-                return Single.error(new RuntimeException("No such user in cache"));
-            }
-            return Single.fromCallable(() -> Paper.book("users").read(username));
-        }
+public class PaperUserRepo implements ICache {
+
+    @Override
+    public User saveUser(User user, String username) {
+        Paper.book("users").write(username, user);
+        return user;
     }
 
-    public Single<List<Repository>> getUserRepos(User user) {
-        if (NetworkStatus.isOnline()) {
-            return ApiHolder.getApi().getUserRepos(user.getReposUrl()).subscribeOn(Schedulers.io())
-                    .subscribeOn(Schedulers.io())
-                    .map(repos -> {
-                        Paper.book("repos").write(user.getLogin(), repos);
-                        return repos;
-                    });
-        } else {
-            if(!Paper.book("repos").contains(user.getLogin())){
-                return Single.error(new RuntimeException("No repos for such user in cache"));
-            }
-            return Single.fromCallable(() -> Paper.book("repos").read(user.getLogin()));
+    @Override
+    public Single<Object> findByLogin(String username) {
+        if(!Paper.book("users").contains(username)){
+            return Single.error(new RuntimeException("No such user in cache"));
         }
+        return Single.fromCallable(() -> Paper.book("users").read(username));
+    }
 
+    @Override
+    public List<Repository> saveRepos(List<Repository> repos, User user) {
+        Paper.book("repos").write(user.getLogin(), repos);
+        return repos;
+    }
 
+    @Override
+    public Single<Object> getRepos(User user) {
+        if(!Paper.book("repos").contains(user.getLogin())){
+            return Single.error(new RuntimeException("No repos for such user in cache"));
+        }
+        return Single.fromCallable(() -> Paper.book("repos").read(user.getLogin()));
     }
 }
