@@ -7,6 +7,7 @@ import com.arellomobile.mvp.MvpPresenter;
 
 import io.reactivex.Scheduler;
 import io.reactivex.subjects.PublishSubject;
+import ru.geekbrains.android3_5.App;
 import ru.geekbrains.android3_5.mvp.model.entity.Repository;
 import ru.geekbrains.android3_5.mvp.model.entity.User;
 import ru.geekbrains.android3_5.mvp.model.repo.MyRepository;
@@ -48,7 +49,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
     public MainPresenter(Scheduler mainThreadScheduler) {
         this.mainThreadScheduler = mainThreadScheduler;
-        userRepo = new MyRepository(new RoomUserRepo());
+        userRepo = App.getRepository();
     }
 
     @Override

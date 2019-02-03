@@ -1,14 +1,13 @@
 package ru.geekbrains.android3_5.mvp.model.repo;
 
+import android.graphics.Bitmap;
+
 import io.reactivex.Single;
-import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
-import ru.geekbrains.android3_5.mvp.model.api.ApiHolder;
 import ru.geekbrains.android3_5.mvp.model.entity.Repository;
 import ru.geekbrains.android3_5.mvp.model.entity.User;
 import ru.geekbrains.android3_5.mvp.model.entity.realm.RealmRepository;
 import ru.geekbrains.android3_5.mvp.model.entity.realm.RealmUser;
-import ru.geekbrains.android3_5.ui.NetworkStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,5 +90,15 @@ public class RealmUserRepo implements ICache {
                 emitter.onSuccess(repos);
             }
         });
+    }
+
+    @Override
+    public void saveImage(Bitmap resource, String url) {
+
+    }
+
+    @Override
+    public Single<Bitmap> getImage(String url) {
+        return null;
     }
 }

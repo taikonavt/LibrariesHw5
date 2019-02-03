@@ -1,8 +1,20 @@
 package ru.geekbrains.android3_5.mvp.model.repo;
 
-import java.util.List;
+import android.graphics.Bitmap;
 
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+
+import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.geekbrains.android3_5.mvp.model.api.ApiHolder;
 import ru.geekbrains.android3_5.mvp.model.entity.Repository;
@@ -39,5 +51,15 @@ public class MyRepository {
                     .subscribeOn(Schedulers.io())
                     .cast((Class<List<Repository>>)(Class)List.class);
         }
+    }
+
+    public void saveImage(Bitmap resource, String url) {
+        cache.saveImage(resource, url);
+    }
+
+    public Single<Bitmap> getImage(String url) {
+        return cache.getImage(url)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

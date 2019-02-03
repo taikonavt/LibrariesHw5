@@ -1,12 +1,11 @@
 package ru.geekbrains.android3_5.mvp.model.repo;
 
+import android.graphics.Bitmap;
+
 import io.paperdb.Paper;
 import io.reactivex.Single;
-import io.reactivex.schedulers.Schedulers;
-import ru.geekbrains.android3_5.mvp.model.api.ApiHolder;
 import ru.geekbrains.android3_5.mvp.model.entity.Repository;
 import ru.geekbrains.android3_5.mvp.model.entity.User;
-import ru.geekbrains.android3_5.ui.NetworkStatus;
 
 import java.util.List;
 
@@ -38,5 +37,15 @@ public class PaperUserRepo implements ICache {
             return Single.error(new RuntimeException("No repos for such user in cache"));
         }
         return Single.fromCallable(() -> Paper.book("repos").read(user.getLogin()));
+    }
+
+    @Override
+    public void saveImage(Bitmap resource, String url) {
+
+    }
+
+    @Override
+    public Single<Bitmap> getImage(String url) {
+        return null;
     }
 }
